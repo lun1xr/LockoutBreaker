@@ -1,0 +1,85 @@
+<Window x:Class="WPCKillerApp.App.LaunchOpSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Launch Operation Settings" Height="300" Width="400">
+    <Grid Margin="20">
+        <DockPanel>
+            <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Res/wpcmonxdark.png" Margin="0,0,10,0"/>
+                    <StackPanel Orientation="Vertical"
+                        <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center"/>
+                        <TextBlock Text="Version 0.0.1" FontSize="12" VerticalAlignment="Bottom"/>
+        <StackPanel>
+            <TextBlock Text="Launch Settings" 
+                FontSize="20" 
+                Margin="0,0,0,20"/>
+            
+            <CheckBox Content="Enable Launch On Startup" 
+                Margin="0,5,0,5" 
+                Name="AutoStartCheckBox"/>
+            
+            <CheckBox Content="Run in Background" 
+                Margin="0,5,0,5" 
+                Name="BackgroundRunCheckBox"/>
+
+            <TextBlock Text="Autorun or Keybind" 
+                Margin="0,5,0,5"
+                FontSize="20"/>
+
+            <CheckBox Content="Autorun"
+                Margin="0,5,0,5"
+                Name="AutorunCheckBox"/>
+
+            <CheckBox Content="Keybind"
+                Margin="0,5,0,5"
+                Name="KeybindCheckBox"/>
+            <StackPanel>
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Name="KeybindComboBox" 
+                    Width="100" 
+                    Height="30" 
+                    Margin="0,5,0,5"
+                    SelectionChanged="ComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Ctrl"/>
+                    <ComboBoxItem Content="Alt"/>
+                    <ComboBoxItem Content="Shift"/>
+                </ComboBox>
+                <ComboBox Name="KeybindComboBox2"
+                    Width="100"
+                    Height="30"
+                    Margin="0,5,0,5"
+                    SelectionChanged="ComboBox2_SelectionChanged">
+                    <ComboBoxItem Content="Ctrl"/>
+                    <ComboBoxItem Content="Alt"/>
+                    <ComboBoxItem Content="Shift"/>
+                </ComboBox>
+                <TextBox Name="KeybindTextBox"
+                    Width="100"
+                    Height="30"
+                    Margin="0,5,0,5"
+                    Text="k"
+                    PreviewKeyDown="KeybindTextBox_PreviewKeyDown"/>
+        </StackPanel>
+            
+            <Button Content="Save Settings" 
+                Width="100" 
+                Height="30" 
+                Margin="0,20,0,0" 
+                HorizontalAlignment="Left"
+                Name="SaveButton"/>
+        </StackPanel>
+    </Grid>
+</Window>
