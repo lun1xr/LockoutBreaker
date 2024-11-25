@@ -7,14 +7,18 @@
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Res/wpcmonxdark.png" Margin="0,0,10,0"/>
-                    <StackPanel Orientation="Vertical"
+                    <StackPanel Orientation="Vertical">
                         <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center"/>
                         <TextBlock Text="Version 0.0.1" FontSize="12" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DockPanel>
         <StackPanel>
             <TextBlock Text="Launch Settings" 
                 FontSize="20" 
                 Margin="0,0,0,20"/>
-            
+             
             <CheckBox Content="Enable Launch On Startup" 
                 Margin="0,5,0,5" 
                 Name="AutoStartCheckBox"/>
@@ -34,7 +38,8 @@
             <CheckBox Content="Keybind"
                 Margin="0,5,0,5"
                 Name="KeybindCheckBox"/>
-            <StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
@@ -47,21 +52,22 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <StackPanel Orientation="Horizontal">
-                <ComboBox Name="KeybindComboBox" 
+                <ComboBox 
+                    x:Name="KeybindComboBox" 
                     Width="100" 
                     Height="30" 
                     Margin="0,5,0,5"
-                    SelectionChanged="ComboBox_SelectionChanged">
+                    SelectionChanged="KeybindComboBox_SelectionChanged">
                     <ComboBoxItem Content="Ctrl"/>
                     <ComboBoxItem Content="Alt"/>
                     <ComboBoxItem Content="Shift"/>
                 </ComboBox>
-                <ComboBox Name="KeybindComboBox2"
+                <ComboBox 
+                    x:Name="KeybindComboBox2"
                     Width="100"
                     Height="30"
                     Margin="0,5,0,5"
-                    SelectionChanged="ComboBox2_SelectionChanged">
+                    SelectionChanged="KeybindComboBox2_SelectionChanged">
                     <ComboBoxItem Content="Ctrl"/>
                     <ComboBoxItem Content="Alt"/>
                     <ComboBoxItem Content="Shift"/>
@@ -74,6 +80,7 @@
                     PreviewKeyDown="KeybindTextBox_PreviewKeyDown"/>
         </StackPanel>
             
+        <StackPanel>    
             <Button Content="Save Settings" 
                 Width="100" 
                 Height="30" 

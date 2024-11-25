@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="App\AppTop.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="App\AppTop.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Include=".\App\LaunchOpSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EditorConfigFiles>
+  </ItemGroup>
+</Project>
