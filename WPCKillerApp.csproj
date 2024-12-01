@@ -1,22 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows8.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="App\AppTop.cs" />
+    <Page Remove="App\App.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="App\AppTop.cs" />
+    <ApplicationDefinition Include="App\App.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Include=".\App\LaunchOpSettings.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </EditorConfigFiles>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
   </ItemGroup>
 </Project>

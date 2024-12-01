@@ -1,92 +1,150 @@
 <Window x:Class="WPCKillerApp.App.LaunchOpSettings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Launch Operation Settings" Height="300" Width="400">
+    Title="Launch Operation Settings" Height="auto" Width="auto">
     <Grid Margin="20">
-        <DockPanel>
-            <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
+        <StackPanel>
+            <Border DockPanel.Dock="Top" Height="64" Padding="10" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Res/wpcmonxdark.png" Margin="0,0,10,0"/>
+                    <Image Source="E:\C# Dev Folder\WPCKillerApp\App\Res\wpcmonxdark.png" Margin="0,0,10,0"
+                           MouseLeftButtonDown="Image_Click"/>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center"/>
                         <TextBlock Text="Version 0.0.1" FontSize="12" VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
-        </DockPanel>
-        <StackPanel>
-            <TextBlock Text="Launch Settings" 
-                FontSize="20" 
-                Margin="0,0,0,20"/>
-             
-            <CheckBox Content="Enable Launch On Startup" 
-                Margin="0,5,0,5" 
-                Name="AutoStartCheckBox"/>
-            
-            <CheckBox Content="Run in Background" 
-                Margin="0,5,0,5" 
-                Name="BackgroundRunCheckBox"/>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel
+                    Width="200">
+                    <TextBlock Text="Launch Settings" 
+                        FontSize="20" 
+                        Margin="5,20,0,0"/>
 
-            <TextBlock Text="Autorun or Keybind" 
-                Margin="0,5,0,5"
-                FontSize="20"/>
+                    <CheckBox Content="Enable Launch On Startup" 
+                        Margin="10,5,0,5" 
+                        Name="AutoLaunchCheckBox"
+                        Click="AutoLaunchCheckBox_Click"/>
 
-            <CheckBox Content="Autorun"
-                Margin="0,5,0,5"
-                Name="AutorunCheckBox"/>
+                    <CheckBox Content="Run in Background" 
+                        Margin="10,5,0,5" 
+                        Name="BackgroundRunCheckBox"
+                        Click="BackgroundRunCheckBox_Click"/>
 
-            <CheckBox Content="Keybind"
-                Margin="0,5,0,5"
-                Name="KeybindCheckBox"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel.Style>
-                <Style TargetType="StackPanel">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-                <ComboBox 
-                    x:Name="KeybindComboBox" 
-                    Width="100" 
-                    Height="30" 
-                    Margin="0,5,0,5"
-                    SelectionChanged="KeybindComboBox_SelectionChanged">
-                    <ComboBoxItem Content="Ctrl"/>
-                    <ComboBoxItem Content="Alt"/>
-                    <ComboBoxItem Content="Shift"/>
-                </ComboBox>
-                <ComboBox 
-                    x:Name="KeybindComboBox2"
-                    Width="100"
-                    Height="30"
-                    Margin="0,5,0,5"
-                    SelectionChanged="KeybindComboBox2_SelectionChanged">
-                    <ComboBoxItem Content="Ctrl"/>
-                    <ComboBoxItem Content="Alt"/>
-                    <ComboBoxItem Content="Shift"/>
-                </ComboBox>
-                <TextBox Name="KeybindTextBox"
-                    Width="100"
-                    Height="30"
-                    Margin="0,5,0,5"
-                    Text="k"
-                    PreviewKeyDown="KeybindTextBox_PreviewKeyDown"/>
-        </StackPanel>
-            
-        <StackPanel>    
-            <Button Content="Save Settings" 
-                Width="100" 
-                Height="30" 
-                Margin="0,20,0,0" 
-                HorizontalAlignment="Left"
-                Name="SaveButton"/>
+                    <TextBlock Text="Autorun or Keybind" 
+                        Margin="5,5,0,5"
+                        FontSize="20"/>
+
+                    <CheckBox Content="Autorun"
+                        Margin="10,5,0,5"
+                        Name="AutorunCheckBox"
+                        Checked='AutorunCheckBox_Checked'
+                        Unchecked="AutorunCheckBox_Unchecked" 
+                        IsChecked="True"
+                        Click="AutorunCheckBox_Click"/>
+
+                    <CheckBox Content="Keybind"
+                        Margin="10,5,0,5"
+                        Name="KeybindCheckBox"
+                        Checked="KeybindCheckBox_Checked"
+                        Unchecked='KeybindCheckBox_Unchecked'
+                        Click="KeybindCheckBox_Click" IsChecked="False"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <ComboBox 
+                            x:Name="KeybindComboBox" 
+                            Width="70" 
+                            Height="20" 
+                            Margin="20,5,0,5"
+                            SelectionChanged="KeybindComboBox_SelectionChanged">
+                            <ComboBoxItem Content="Ctrl"/>
+                            <ComboBoxItem Content="Alt"/>
+                            <ComboBoxItem Content="Shift"/>
+                        </ComboBox>
+                        <ComboBox 
+                            x:Name="KeybindComboBox2"
+                            Width="70"
+                            Height="20"
+                            Margin="20,5,0,5"
+                            SelectionChanged="KeybindComboBox2_SelectionChanged">
+                            <ComboBoxItem Content="Ctrl"/>
+                            <ComboBoxItem Content="Alt"/>
+                            <ComboBoxItem Content="Shift"/>
+                        </ComboBox>
+                        <TextBox Name="KeybindTextBox"
+                            Width="50"
+                            Height="20"
+                            Margin="20,5,0,5"
+                            Text="k"
+                            PreviewKeyDown="KeybindTextBox_PreviewKeyDown"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel
+                    Margin="20,0,0,0"
+                    Width="600">
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsImageClicked}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsImageClicked}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="Subterfuge Mode"
+                            FontSize="20"
+                            Margin="0,20,0,0"/>
+                        <TextBlock Text="Psuedo Device Lock Keybind: Set a keybind that will allow you to summon a fake 'Time is up' Lockscreen"
+                            Margin="5,5,0,0"
+                            TextWrapping="Wrap"/>
+                        <Button Content="Start Recording" 
+                            Width="100" 
+                            Height="20" 
+                            Margin="5,10,0,0" 
+                            HorizontalAlignment="Left"
+                            x:Name="RecordButton"
+                            Click="RecordButton_Click"/>
+                        <TextBox x:Name="RecordedKeybindTextBox"
+                            Width="200"
+                            Height="20"
+                            Margin="5,10,10,0"
+                            IsReadOnly="True"
+                            HorizontalAlignment="Left"
+                            PreviewKeyDown="KeybindTextBox_PreviewKeyDown"/>
+                        <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon, renames the running process, and creates a fake service identical to the default Windows Parental Controls service"
+                            Margin="5,10,0,5"
+                            TextWrapping="Wrap"/>
+                        <CheckBox Content="Safe Mode"
+                            Margin="5,0,0,5"
+                            Name="SafeModeCheckBox"
+                            Checked="SafeModeCheckBox_Checked"
+                            Unchecked="SafeModeCheckBox_Unchecked"
+                            Click="SafeModeCheckBox_Click"/>
+                    </StackPanel>
+                    <Button Content="Save Settings" 
+                        Width="100" 
+                        Height="30" 
+                        Margin="0,20,10,0" 
+                        HorizontalAlignment="Right"
+                        Name="SaveButton"/>
+                </StackPanel>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
