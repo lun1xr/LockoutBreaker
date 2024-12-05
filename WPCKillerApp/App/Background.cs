@@ -16,7 +16,9 @@ namespace WPCKillerApp.App
         {
             try
             {
-                settingsWindow!.Show();
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+                settingsWindow.Show();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 settingsWindow!.Focus();
             }
             catch (Exception e) when (e is NullReferenceException || e is InvalidOperationException)

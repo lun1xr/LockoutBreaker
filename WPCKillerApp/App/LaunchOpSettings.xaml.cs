@@ -6,6 +6,8 @@ using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Numerics;
+using System.Configuration;
 
 namespace WPCKillerApp.App
 {
@@ -14,58 +16,9 @@ namespace WPCKillerApp.App
         public LaunchOpSettings()
         {
             InitializeComponent();
+            this.Width = 870;
+            this.Height = 400;
         }
-
-        // ImageClick Event
-
-        private bool _isImageClicked;
-
-        public bool IsImageClicked
-        {
-            get => _isImageClicked;
-            set
-            {
-                _isImageClicked = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void Image_Click(object sender, RoutedEventArgs e)
-        {
-            IsImageClicked = !IsImageClicked;
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
-        // Combobox Exclusivity Logic
-        private void KeybindComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (KeybindComboBox?.SelectedItem is ComboBoxItem selectedItem)
-            {
-                var selectedContent = selectedItem.Content.ToString();
-                foreach (ComboBoxItem item in KeybindComboBox2.Items)
-                {
-                    item.IsEnabled = item.Content.ToString() != selectedContent;
-                }
-            }
-        }
-        private void KeybindComboBox2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (KeybindComboBox2?.SelectedItem is ComboBoxItem selectedItem)
-            {
-                var selectedContent = selectedItem.Content.ToString();
-                foreach (ComboBoxItem item in KeybindComboBox.Items)
-                {
-                    item.IsEnabled = item.Content.ToString() != selectedContent;
-                }
-            }
-        }
-
         // Autorun/Keybind Exclusivity Logic
         private void AutorunCheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -142,7 +95,20 @@ namespace WPCKillerApp.App
             }
         }
 
-        private void KeybindTextBox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private bool isRecording2 = false;
+        private string recordedKeys2 = string.Empty;
+        private void RecordButton2_Click(object sender, RoutedEventArgs e)
+        {
+            isRecording2 = !isRecording2;
+            RecordButton2.Content = isRecording2 ? "Stop Recording" : "Start Recording";
+            if (!isRecording2)
+            {
+                RecordedKeybindTextBox2.Text = recordedKeys2;
+                recordedKeys2 = string.Empty;
+            }
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (isRecording)
             {
@@ -151,6 +117,17 @@ namespace WPCKillerApp.App
                     recordedKeys += " + ";
                 }
                 recordedKeys += e.Key.ToString();
+                RecordedKeybindTextBox.Text = recordedKeys; // Update the TextBox live
+                e.Handled = true;
+            }
+            if (isRecording2)
+            {
+                if (!string.IsNullOrEmpty(recordedKeys2))
+                {
+                    recordedKeys2 += " + ";
+                }
+                recordedKeys2 += e.Key.ToString();
+                RecordedKeybindTextBox2.Text = recordedKeys2; // Update the TextBox live
                 e.Handled = true;
             }
         }
@@ -163,5 +140,25 @@ namespace WPCKillerApp.App
         private void SafeModeCheckBox_Checked(object sender, RoutedEventArgs e) { }
         private void SafeModeCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
         private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) { }
+
+        // Save Settings
+        private void SaveSettings_Click(object sender, RoutedEventArgs e) 
+        {
+            SaveSettings();
+        }
+
+        private void SaveSettings()
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            config.AppSettings.Settings["AutoLaunch"].Value = AutoLaunchCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["SafeMode"].Value = SafeModeCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["LaunchMinimized"].Value = BackgroundRunCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["Autorun"].Value = AutorunCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["Keybind"].Value = KeybindCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["RecordedKeybind"].Value = RecordedKeybindTextBox.Text;
+            config.AppSettings.Settings["RecordedKeybind2"].Value = RecordedKeybindTextBox2.Text;
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
     }
 }
