@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Numerics;
 using System.Configuration;
+using System.Windows.Controls.Primitives;
+using System.Security.AccessControl;
 
 namespace WPCKillerApp.App
 {
@@ -16,8 +18,9 @@ namespace WPCKillerApp.App
         public LaunchOpSettings()
         {
             InitializeComponent();
-            this.Width = 870;
-            this.Height = 400;
+            this.Width = 371;
+            this.Height = 415;
+            LoadSettings();
         }
         // Autorun/Keybind Exclusivity Logic
         private void AutorunCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -131,6 +134,30 @@ namespace WPCKillerApp.App
                 e.Handled = true;
             }
         }
+        private void Popup_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            if (sender is Thumb thumb)
+            {
+                var parent = thumb.Parent;
+                while (parent is FrameworkElement frameworkElement && frameworkElement is not Popup)
+                {
+                    parent = frameworkElement.Parent;
+                }
+
+                if (parent is Popup popup)
+                {
+                    var horizontalOffset = popup.HorizontalOffset + e.HorizontalChange;
+                    var verticalOffset = popup.VerticalOffset + e.VerticalChange;
+
+                    popup.HorizontalOffset = horizontalOffset;
+                    popup.VerticalOffset = verticalOffset;
+                }
+            }
+        }
+        private void ClosePopup_Click(object sender, RoutedEventArgs e)
+        { 
+            ImageCheck.IsChecked = false;
+        }
 
         // Empty references for missing interactions
         private void AutorunCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
@@ -142,23 +169,44 @@ namespace WPCKillerApp.App
         private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) { }
 
         // Save Settings
-        private void SaveSettings_Click(object sender, RoutedEventArgs e) 
+        private async void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
             SaveSettings();
+            SaveButton.IsEnabled = false;
+            await Task.Delay(500);
+            SaveButton.IsEnabled = true;
         }
 
         private void SaveSettings()
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            config.AppSettings.Settings["AutoLaunch"].Value = AutoLaunchCheckBox.IsChecked.ToString();
-            config.AppSettings.Settings["SafeMode"].Value = SafeModeCheckBox.IsChecked.ToString();
-            config.AppSettings.Settings["LaunchMinimized"].Value = BackgroundRunCheckBox.IsChecked.ToString();
-            config.AppSettings.Settings["Autorun"].Value = AutorunCheckBox.IsChecked.ToString();
-            config.AppSettings.Settings["Keybind"].Value = KeybindCheckBox.IsChecked.ToString();
+            config.AppSettings.Settings["AutoLaunch"].Value = AutoLaunchCheckBox.IsChecked == true ? "true" : "false";
+            config.AppSettings.Settings["SafeMode"].Value = SafeModeCheckBox.IsChecked == true ? "true" : "false";
+            config.AppSettings.Settings["LaunchMinimized"].Value = BackgroundRunCheckBox.IsChecked == true ? "true" : "false";
+            config.AppSettings.Settings["Autorun"].Value = AutorunCheckBox.IsChecked == true ? "true" : "false";
+            config.AppSettings.Settings["Keybind"].Value = KeybindCheckBox.IsChecked == true ? "true" : "false";
             config.AppSettings.Settings["RecordedKeybind"].Value = RecordedKeybindTextBox.Text;
             config.AppSettings.Settings["RecordedKeybind2"].Value = RecordedKeybindTextBox2.Text;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+        }
+        private void LoadSettings()
+        {
+            var autoLaunch = ConfigurationManager.AppSettings["AutoLaunch"];
+            var safeMode = ConfigurationManager.AppSettings["SafeMode"];
+            var launchMinimized = ConfigurationManager.AppSettings["LaunchMinimized"];
+            var autorun = ConfigurationManager.AppSettings["Autorun"];
+            var keybind = ConfigurationManager.AppSettings["Keybind"];
+            var recordedKeybind = ConfigurationManager.AppSettings["RecordedKeybind"];
+            var recordedKeybind2 = ConfigurationManager.AppSettings["RecordedKeybind2"];
+
+            AutoLaunchCheckBox.IsChecked = autoLaunch?.ToLower() == "true";
+            SafeModeCheckBox.IsChecked = safeMode?.ToLower() == "true";
+            BackgroundRunCheckBox.IsChecked = launchMinimized?.ToLower() == "true";
+            AutorunCheckBox.IsChecked = autorun?.ToLower() == "true";
+            KeybindCheckBox.IsChecked = keybind?.ToLower() == "true";
+            RecordedKeybindTextBox.Text = recordedKeybind;
+            RecordedKeybindTextBox2.Text = recordedKeybind2;
         }
     }
 }

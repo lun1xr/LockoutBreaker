@@ -13,6 +13,7 @@ using System.ServiceProcess;
 using System.IO;
 using System.Configuration.Install;
 using static System.ServiceProcess.ServiceController;
+using System.Security.Principal;
 
 namespace WPCKillerApp.App
 {
@@ -20,13 +21,24 @@ namespace WPCKillerApp.App
     {
         public TaskbarIcon _taskbarIcon = null!;
         private LaunchOpSettings _launchOpSettings = null!;
+        private NoPerms _noPerms = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            AdminCheck();
+            _noPerms = new NoPerms();
+            _noPerms.Show();
             _taskbarIcon = (TaskbarIcon)FindResource("TaskbarIcon");
             _launchOpSettings = new LaunchOpSettings();
-            _launchOpSettings.Show();
+            if (ConfigurationManager.AppSettings["LaunchMinimized"] == "true")
+            {
+                
+            }
+            else
+            {
+                _launchOpSettings.Show();
+            }
             if (ConfigurationManager.AppSettings["SafeMode"] == "true")
             {
                 // Install the service if not already installed
@@ -73,6 +85,13 @@ namespace WPCKillerApp.App
             catch (Exception ex)
             {
                 MessageBox.Show($"Service start failed: {ex.Message}");
+            }
+        }
+        private static void AdminCheck() 
+        {
+            if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
+            {
+                
             }
         }
     }

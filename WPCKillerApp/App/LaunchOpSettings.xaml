@@ -19,8 +19,7 @@
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal">
-                <StackPanel
-                    Width="auto">
+                <StackPanel Width="auto">
                     <TextBlock Text="Launch Settings" 
                         FontSize="20" 
                         Margin="5,20,0,0"/>
@@ -28,13 +27,12 @@
                     <CheckBox Content="Enable Launch On Startup" 
                         Margin="10,5,0,5" 
                         Name="AutoLaunchCheckBox"
-                        IsChecked="{Binding AutoLaunch, Mode=TwoWay}"
+                        IsChecked="False"
                         Click="AutoLaunchCheckBox_Click"/>
 
                     <CheckBox Content="Launch Minimized" 
                         Margin="10,5,0,5" 
                         Name="BackgroundRunCheckBox"
-                        IsChecked="{Binding LaunchMinimized, Mode=TwoWay}"
                         Click="BackgroundRunCheckBox_Click"/>
 
                     <TextBlock Text="Autorun or Keybind" 
@@ -44,7 +42,7 @@
                     <CheckBox Content="Autorun"
                         Margin="10,5,0,5"
                         Name="AutorunCheckBox"
-                        IsChecked="{Binding Autorun, Mode=TwoWay}"
+                        IsChecked="True"
                         Checked='AutorunCheckBox_Checked'
                         Unchecked="AutorunCheckBox_Unchecked" 
                         Click="AutorunCheckBox_Click"/>
@@ -52,7 +50,7 @@
                     <CheckBox Content="Keybind"
                         Margin="10,5,0,5"
                         Name="KeybindCheckBox"
-                        IsChecked="{Binding Keybind, Mode=TwoWay}"
+                        IsChecked="False"
                         Checked="KeybindCheckBox_Checked"
                         Unchecked='KeybindCheckBox_Unchecked'
                         Click="KeybindCheckBox_Click"/>
@@ -62,10 +60,10 @@
                             <Style TargetType="StackPanel">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="IsEnabled" Value="True"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsChecked, ElementName=KeybindCheckBox}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="IsEnabled" Value="False"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -82,12 +80,18 @@
                             Height="20"
                             Margin="5,10,10,0"
                             IsReadOnly="True"
-                            Text="{Binding RecordedKeybind2, Mode=TwoWay}"
+                            Text=""
                             HorizontalAlignment="Left"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel
-                    Margin="20,0,0,0"
+                <Popup IsOpen="{Binding IsChecked, ElementName=ImageCheck}" 
+                       PopupAnimation="Fade"
+                       AllowsTransparency="True">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="5">
+                    <Grid>
+                            <Thumb DragDelta="Popup_DragDelta" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
+                            <StackPanel
+                    Margin="20,0,20,20"
                     Width="auto">
                     <StackPanel>
                         <StackPanel.Style>
@@ -106,7 +110,8 @@
                             FontSize="20"
                             Margin="0,20,0,0"/>
                         <TextBlock Text="Psuedo Device Lock Keybind: Set a keybind that will allow you to summon a fake 'Time is up' Lockscreen"
-                            Margin="5,5,0,0"/>
+                            Margin="5,5,0,0"
+                            Foreground="Gray"/>
                         <StackPanel Orientation="Horizontal">
                             <Button Content="Start Recording" 
                                 Width="100" 
@@ -120,15 +125,16 @@
                                 Height="20"
                                 Margin="5,10,10,0"
                                 IsReadOnly="True"
-                                Text="{Binding RecordedKeybind, Mode=TwoWay}"
+                                Text=""
                                 HorizontalAlignment="Left"/>
                         </StackPanel>
                         <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon, renames the &#10;running process, and creates a fake service identical to the default Windows Parental Controls service"
-                            Margin="5,10,0,5"/>
+                            Margin="5,10,0,5"
+                            Foreground="Gray"/>
                         <CheckBox Content="Safe Mode"
                             Margin="5,0,0,5"
                             Name="SafeModeCheckBox"
-                            IsChecked="{Binding IsSafeMode, Mode=TwoWay}"
+                            IsChecked="False"
                             Checked="SafeModeCheckBox_Checked"
                             Unchecked="SafeModeCheckBox_Unchecked"
                             Click="SafeModeCheckBox_Click"/>
@@ -136,8 +142,18 @@
                             Foreground="Red"
                             FontSize="9"
                             Margin="5,0,0,5"/>
+                        <Button Content="Close"
+                            Width="100"
+                            Height="30"
+                            Margin="5,10,0,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Click="ClosePopup_Click"/>
                     </StackPanel>
                 </StackPanel>
+                        </Grid>
+                    </Border>
+                </Popup>
             </StackPanel>
         </StackPanel>
         <Button Content="Save Settings" 

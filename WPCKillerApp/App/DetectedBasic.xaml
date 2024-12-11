@@ -1,0 +1,26 @@
+﻿<Page x:Class="WPCKillerApp.App.DetectedBasic"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPCKillerApp.App"
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="370"
+      Title="DetectedBasic">
+
+    <Grid  Margin="20">
+        <StackPanel>
+            <TextBlock  Text="Admin Perms Required" FontSize="20" Margin="15,0,5,0"/>
+            <TextBlock  Text="This app requires admin permissions to function properly. If you do not run with admin permissions, the following features will not work:" FontSize="12" Margin="5,20,5,0" Foreground="Gray" TextWrapping="Wrap"/>
+            <TextBlock  Text="-All of them, unles you want to add a nonfunctional app to your startup folder" FontSize="12" Margin="20,10,5,0" Foreground="Gray" TextWrapping="Wrap"/>
+            <TextBlock  Text="If you have access to an account with administrative priveleges, please sign in to that account and open the app again. If you do not, you may follow this guide to enable the default windows admin account. Click next to continue." FontSize="12" Margin="5,20,5,0" Foreground="Gray" TextWrapping="Wrap"/>
+            <Button Content="I have access to an admin account" Margin="15,10,0,0" Click="AccessButton_Click" Background="{x:Null}" HorizontalAlignment="Left" Foreground="#FF5159D4" Width="190" BorderBrush="#FF5159D4">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

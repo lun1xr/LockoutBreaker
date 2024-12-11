@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 
-namespace WPCKillerApp
+namespace WPCKillerApp.App
 {
     internal static class Constants{
         public static string ProgramVersionBase
