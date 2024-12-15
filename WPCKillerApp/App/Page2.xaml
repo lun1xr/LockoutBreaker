@@ -32,14 +32,26 @@
                     </Button.Resources>
                 </Button>
             </StackPanel>
+            <TextBlock Text="File Content:" 
+                       FontSize="12"
+                       Foreground="Gray"
+                       Margin="5,10,5,0"
+                       TextWrapping="Wrap"/>
             <TextBox   Text="" 
                        x:Name="BatCode"
                        FontSize="12"
                        Foreground="White"
                        Background="#FF313131"
-                       Height="155"
+                       Height="95"
                        Margin="10,10,10,0"
                        TextWrapping="WrapWithOverflow"/>
+            <Button Content="Save File" Name="SaveFileButton" Click="SaveFileButton_Click" Margin="5,10,20,10" Background="{x:Null}" HorizontalAlignment="Right" Foreground="#FF5159D4" Height="22" Width="60" BorderBrush="#FF5159D4">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,0 +1,27 @@
+﻿<Page x:Class="WPCKillerApp.App.Page1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPCKillerApp.App"
+      mc:Ignorable="d" 
+      d:DesignHeight="320" d:DesignWidth="370"
+      Title="RecoveryInstructions">
+
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Step 3:" FontSize="20" Margin="15,0,5,0"/>
+            <TextBlock Text="Once you have entered the recovery environment (not yet), you will navigate through the following options to reach the command prompt." 
+                       FontSize="12"
+                       Foreground="Gray"
+                       Margin="5,10,5,0"
+                       TextWrapping="Wrap"/>
+            <ScrollViewer Height="235" VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <Image Source="Res\winretroubleshootw.png" Width="300" HorizontalAlignment="Center" Margin="20,10,20,10"/>
+                    <Image Source="Res\winrecmd.png" Width="300" HorizontalAlignment="Center" Margin="20,0"/>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+    </Grid>
+</Page>

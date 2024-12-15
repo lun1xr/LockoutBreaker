@@ -17,11 +17,12 @@ namespace WPCKillerApp.App
     public partial class NoPerms : Window
     {
         private int currentPageIndex = 0;
-        private readonly Page[] pages = { new DetectedBasic(), new Step1(), new Page2() };
+        private readonly Page[] pages;
 
         public NoPerms()
         {
             InitializeComponent();
+            pages = new Page[] { new DetectedBasic(), new Step1(), new Page2(this), new Page1(), new EnterRE(), new RE2() };
             MainFrame.Content = pages[currentPageIndex];
         }
 
@@ -40,6 +41,14 @@ namespace WPCKillerApp.App
             {
                 currentPageIndex++;
                 MainFrame.Content = pages[currentPageIndex];
+            }
+            if (currentPageIndex == 5)
+            {
+                Next.IsEnabled = false;
+            }
+            if (currentPageIndex == 2)
+            {
+                Next.IsEnabled = false;
             }
         }
     }

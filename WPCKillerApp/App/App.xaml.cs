@@ -26,10 +26,8 @@ namespace WPCKillerApp.App
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            AdminCheck();
-            _noPerms = new NoPerms();
-            _noPerms.Show();
             _taskbarIcon = (TaskbarIcon)FindResource("TaskbarIcon");
+            AdminCheck();
             _launchOpSettings = new LaunchOpSettings();
             if (ConfigurationManager.AppSettings["LaunchMinimized"] == "true")
             {
@@ -91,7 +89,8 @@ namespace WPCKillerApp.App
         {
             if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
             {
-                
+                NoPerms noPerms = new();
+                noPerms.ShowDialog();
             }
         }
     }

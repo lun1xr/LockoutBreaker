@@ -20,7 +20,7 @@
                 </StackPanel>
             </Border>
             <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,10,0,0">
                 <Button Content="Back" Click="BackButton_Click" Margin="5" Width="50">
                     <Button.Resources>
                         <Style TargetType="Border">
@@ -28,7 +28,7 @@
                         </Style>
                     </Button.Resources>
                 </Button>
-                <Button Content="Next" Click="NextButton_Click" Margin="5" Width="50">
+                <Button Content="Next" Name="Next" Click="NextButton_Click" Margin="5" Width="50">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="5"/>

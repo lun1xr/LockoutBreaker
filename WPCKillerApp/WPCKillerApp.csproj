@@ -7,7 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="App\Res\winrecmd.png" />
     <None Remove="App\Res\winremenudefault.png" />
+    <None Remove="App\Res\winretroubleshoot.png" />
+    <None Remove="App\Res\winretroubleshootw.png" />
     <None Remove="App\Res\wpcmon.ico" />
     <None Remove="App\Res\wpcmonxdark.png" />
     <None Remove="App\Res\wpcmonxlight.ico" />
@@ -19,7 +22,13 @@
     <ApplicationDefinition Include="App\App.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="App\Res\winrecmd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="App\Res\winremenudefault.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="App\Res\winretroubleshootw.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="App\Res\wpcmon.ico">

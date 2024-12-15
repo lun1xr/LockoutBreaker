@@ -1,0 +1,50 @@
+﻿<Page x:Class="WPCKillerApp.App.EnterRE"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WPCKillerApp.App"
+      mc:Ignorable="d" 
+      d:DesignHeight="350" d:DesignWidth="370"
+      Title="EnterRE">
+
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Step 4:" FontSize="20" Margin="15,0,5,0"/>
+            <TextBlock Text="In the command prompt, you will enter the following lines. Again, write this down or save it somewhere. This is the important part. You will not be able to access it from the Recovery Environment." 
+               FontSize="12"
+               Foreground="Gray"
+               Margin="5,10,5,0"
+               TextWrapping="Wrap"/>
+            <TextBlock Text="For those of you who have never used the command prompt, each line is a seperate command. Press enter between lines to execute." 
+                       FontSize="12"
+                       Foreground="Red"
+                       Margin="5,10,5,0"
+                       TextWrapping="Wrap"/>
+            <TextBlock   Text="" 
+                       x:Name="Bash"
+                       FontSize="12"
+                       Foreground="White"
+                       Background="#FF313131"
+                       Height="165"
+                       Margin="10,10,10,0"
+                       TextWrapping="WrapWithOverflow"/>
+
+            <Button Content="Refresh (or the text won't load)"
+                    Click="RefreshButton_Click"
+                    Margin="5,10,20,10"
+                    Background="{x:Null}"
+                    HorizontalAlignment="Right"
+                    Foreground="#FF5159D4"
+                    Height="22"
+                    Width="180"
+                    BorderBrush="#FF5159D4">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="5"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>
