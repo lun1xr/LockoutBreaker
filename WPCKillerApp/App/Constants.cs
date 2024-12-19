@@ -30,6 +30,14 @@ namespace Wpcmon.App
                 }
             }
         }
+        private static string GetProcessIdByExePath(string exePath)
+        {
+        var process = Process.GetProcesses()
+            .FirstOrDefault(p => p.MainModule.FileName.Equals(exePath, StringComparison.OrdinalIgnoreCase));
+
+        return process != null ? process.Id.ToString() : "Process not found";
+        }
+        public static string WPCid => GetProcessIdByExePath(@"%systemroot%\System32\wpcmon.exe");
         public static string AppDataFolderName = "Wpcmon";
         public static string WindowsStartupFolder => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
