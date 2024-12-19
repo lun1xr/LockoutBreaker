@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:WPCKillerApp.App.App.OnExit(System.Object,System.Windows.ExitEventArgs)")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Wpcmon.App.App.OnExit(System.Object,System.Windows.ExitEventArgs)")]

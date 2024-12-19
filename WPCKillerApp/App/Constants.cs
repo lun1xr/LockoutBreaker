@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
-    internal static class Constants{
+    internal static class Constants
+    {
         public static string ProgramVersionBase
         {
             get
@@ -29,11 +30,11 @@ namespace WPCKillerApp.App
                 }
             }
         }
-        public static string AppDataFolderName = "WPCKillerApp";
+        public static string AppDataFolderName = "Wpcmon";
         public static string WindowsStartupFolder => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static string AppDataFolder => Path.Combine(WindowsAppDataFolder, AppDataFolderName);
-        public static string AppShortcutPath => Path.Join(WindowsStartupFolder, "WPCKillerApp.lnk");
+        public static string AppShortcutPath => Path.Join(WindowsStartupFolder, "Wpcmon.lnk");
         public static string? ExePath => Process.GetCurrentProcess().MainModule?.FileName;
         public static string? LocalFolder => Path.GetDirectoryName(ExePath);
         public static string IconPath => Path.Join(LocalFolder, "Res", "wpcmonxlight.ico");

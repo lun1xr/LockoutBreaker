@@ -10,11 +10,16 @@ using System.Numerics;
 using System.Configuration;
 using System.Windows.Controls.Primitives;
 using System.Security.AccessControl;
+using Constants = Wpcmon.App.Constants;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     public partial class LaunchOpSettings : Window
     {
+        private TimesUp_ _timesUp = null!;
+        private CancellationTokenSource? _cancellationTokenSource;
         public LaunchOpSettings()
         {
             InitializeComponent();
@@ -110,27 +115,43 @@ namespace WPCKillerApp.App
                 recordedKeys2 = string.Empty;
             }
         }
+        private HashSet<Key> recordedKeySet = new HashSet<Key>();
+        private HashSet<Key> recordedKeySet2 = new HashSet<Key>();
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            if (e.IsRepeat)
+            {
+                return;
+            }
+
             if (isRecording)
             {
-                if (!string.IsNullOrEmpty(recordedKeys))
+                if (!recordedKeySet.Contains(e.Key))
                 {
-                    recordedKeys += " + ";
+                    if (!string.IsNullOrEmpty(recordedKeys))
+                    {
+                        recordedKeys += " + ";
+                    }
+                    recordedKeys += e.Key.ToString();
+                    RecordedKeybindTextBox.Text = recordedKeys; // Update the TextBox live
+                    recordedKeySet.Add(e.Key);
                 }
-                recordedKeys += e.Key.ToString();
-                RecordedKeybindTextBox.Text = recordedKeys; // Update the TextBox live
                 e.Handled = true;
             }
+
             if (isRecording2)
             {
-                if (!string.IsNullOrEmpty(recordedKeys2))
+                if (!recordedKeySet2.Contains(e.Key))
                 {
-                    recordedKeys2 += " + ";
+                    if (!string.IsNullOrEmpty(recordedKeys2))
+                    {
+                        recordedKeys2 += " + ";
+                    }
+                    recordedKeys2 += e.Key.ToString();
+                    RecordedKeybindTextBox2.Text = recordedKeys2; // Update the TextBox live
+                    recordedKeySet2.Add(e.Key);
                 }
-                recordedKeys2 += e.Key.ToString();
-                RecordedKeybindTextBox2.Text = recordedKeys2; // Update the TextBox live
                 e.Handled = true;
             }
         }
@@ -154,14 +175,155 @@ namespace WPCKillerApp.App
                 }
             }
         }
+        private void AutorunCheckBox_Click(object sender, RoutedEventArgs e) 
+        {
+            if (AutorunCheckBox.IsChecked == true)
+            {
+                ProcessMonitor();
+            }
+            else
+            {
+                KillYOURSELF();
+            }
+        }
+        private void ProcessMonitor() 
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            var token = _cancellationTokenSource.Token;
+
+            Task.Run(async () =>
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    await Task.Delay(1000);
+                    Process[] processes = Process.GetProcessesByName("wpcmon");
+                    if (processes.Length > 0)
+                    {
+                        ThatOneThing();
+                    }
+                }
+            }, token);
+        }
+        private void KillYOURSELF() //Do it
+        {
+            _cancellationTokenSource?.Cancel();
+        }
         private void ClosePopup_Click(object sender, RoutedEventArgs e)
         { 
             ImageCheck.IsChecked = false;
         }
+        private void RegisterKeybind()
+        {
+            string? keysString = ConfigurationManager.AppSettings["RecordedKeybind"];
+            string separator = " + ";
+            if (!string.IsNullOrEmpty(keysString))
+            {
+                string[] keyArray = keysString.Split(new string[] { separator }, StringSplitOptions.None);
+                List<Key> keys = new List<Key>();
+
+                foreach (string keyString in keyArray)
+                {
+                    if (Enum.TryParse(keyString, out Key key))
+                    {
+                        keys.Add(key);
+                    }
+                }
+
+                EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyDownEvent, new KeyEventHandler((sender, e) =>
+                {
+                    if (keys.All(key => Keyboard.IsKeyDown(key)))
+                    {
+                        if (_timesUp == null || !_timesUp.IsVisible)
+                        {
+                            _timesUp = new TimesUp_();
+                            _timesUp.Show();
+                        }
+                        else
+                        {
+                            _timesUp.Hide();
+                        }
+                    }
+                }), true);
+            }
+        }
+        private void RegisterKeybind2()
+        {
+            string? keysString = ConfigurationManager.AppSettings["RecordedKeybind2"];
+            string separator = " + ";
+            if (!string.IsNullOrEmpty(keysString))
+            {
+                string[] keyArray = keysString.Split(new string[] { separator }, StringSplitOptions.None);
+                List<Key> keys = new List<Key>();
+
+                foreach (string keyString in keyArray)
+                {
+                    if (Enum.TryParse(keyString, out Key key))
+                    {
+                        keys.Add(key);
+                    }
+                }
+
+                EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyDownEvent, new KeyEventHandler((sender, e) =>
+                {
+                    if (keys.All(key => Keyboard.IsKeyDown(key)))
+                    {
+                        ThatOneThing();
+                    }
+                }), true);
+            }
+        }
+        private void ThatOneThing()
+        {
+            try
+            {
+                ProcessStartInfo processInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Verb = "runas", // This requests elevated privileges
+                    UseShellExecute = false,
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using (Process? process = Process.Start(processInfo))
+                {
+                    if (process != null)
+                    {
+                        using (StreamWriter sw = process.StandardInput)
+                        {
+                            if (sw.BaseStream.CanWrite)
+                            {
+                                // Write your series of commands here
+                                sw.WriteLine("takeown /F %systemroot%\\System32\\wpcmon.exe");
+                                sw.WriteLine("icacls \"%systemroot%\\System32\\wpcmon.exe\" /grant Administrators:F");
+                                sw.WriteLine("taskkill /F /IM wpcmon.exe /T ");
+                                sw.WriteLine("ren '%systemroot%\\System32\\wpcmon.exe' 'wpcmon_disbaled.exe'");
+                                sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyMonitor\" /F");
+                                sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyRefreshTask\" /F");
+                            }
+                        }
+
+                        string output = process.StandardOutput.ReadToEnd();
+                        string error = process.StandardError.ReadToEnd();
+
+                        process.WaitForExit();
+
+                        // Handle the output and error as needed
+                        Console.WriteLine(output);
+                        Console.WriteLine(error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
 
         // Empty references for missing interactions
         private void AutorunCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
-        private void AutorunCheckBox_Click(object sender, RoutedEventArgs e) { }
         private void KeybindCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
         private void KeybindCheckBox_Click(object sender, RoutedEventArgs e) { }
         private void SafeModeCheckBox_Checked(object sender, RoutedEventArgs e) { }
@@ -189,6 +351,14 @@ namespace WPCKillerApp.App
             config.AppSettings.Settings["RecordedKeybind2"].Value = RecordedKeybindTextBox2.Text;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind"]))
+            {
+                RegisterKeybind();
+            }
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind2"]))
+            {
+                RegisterKeybind2();
+            }
         }
         private void LoadSettings()
         {
@@ -207,6 +377,18 @@ namespace WPCKillerApp.App
             KeybindCheckBox.IsChecked = keybind?.ToLower() == "true";
             RecordedKeybindTextBox.Text = recordedKeybind;
             RecordedKeybindTextBox2.Text = recordedKeybind2;
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind"]))
+            {
+                RegisterKeybind();
+            }
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind2"]))
+            {
+                RegisterKeybind2();
+            }
+            if (ConfigurationManager.AppSettings["Autorun"] == "true")
+            {
+                ProcessMonitor();
+            }
         }
     }
 }

@@ -14,14 +14,14 @@ using System.IO;
 using System.Configuration.Install;
 using static System.ServiceProcess.ServiceController;
 using System.Security.Principal;
+using FakeService;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     public partial class App : Application
     {
         public TaskbarIcon _taskbarIcon = null!;
         private LaunchOpSettings _launchOpSettings = null!;
-        private NoPerms _noPerms = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -39,46 +39,28 @@ namespace WPCKillerApp.App
             }
             if (ConfigurationManager.AppSettings["SafeMode"] == "true")
             {
-                // Install the service if not already installed
-                InstallService();
-
-                // Start the service
-                StartMyService();
+                StartLeService();
             }
+
         }
 
         private void OnExit(object sender, ExitEventArgs e)
         {
             _taskbarIcon.Dispose();
-            _launchOpSettings.Close();
+            _launchOpSettings?.Close();
         }
 
-        private static void InstallService()
-        {
-            try
-            {
-                string serviceAssemblyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FakeService.exe");
-                using AssemblyInstaller installer = new(serviceAssemblyPath, null);
-                installer.UseNewContext = true;
-                installer.Install(null);
-                installer.Commit(null);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Service installation failed: {ex.Message}");
-            }
-        }
 
-        private static void StartMyService()
+        private static void StartLeService()
         {
+            var processInfo = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                FileName = "FakeService.exe",
+            };
             try
             {
-                ServiceController service = new("WpcMonSvcx");
-                if (service.Status != ServiceControllerStatus.Running)
-                {
-                    service.Start();
-                    service.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromSeconds(30));
-                }
+                Process.Start(processInfo);
             }
             catch (Exception ex)
             {
@@ -89,8 +71,27 @@ namespace WPCKillerApp.App
         {
             if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))
             {
-                NoPerms noPerms = new();
-                noPerms.ShowDialog();
+                var processInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    FileName = Environment.ProcessPath,
+                    Verb = "runas"
+                };
+
+                try
+                {
+                    Process.Start(processInfo);
+                    Application.Current.Shutdown();
+                }
+                catch (Exception)
+                {
+                    NoPerms noPerms = new();
+                    noPerms.ShowDialog();
+                }
+            }
+            else
+            {
+
             }
         }
     }

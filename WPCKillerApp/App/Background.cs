@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     public partial class Background
     {

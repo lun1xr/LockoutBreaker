@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>App\Res\wpcmon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="App\Res\winrecmd.png" />
@@ -20,6 +21,11 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App\App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App\Res\wpcmon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="App\Res\winrecmd.png">
@@ -45,6 +51,10 @@
   <ItemGroup>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FakeService\FakeService.csproj" />
   </ItemGroup>
 
   <ItemGroup>

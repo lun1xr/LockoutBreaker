@@ -16,10 +16,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Configuration;
-using WPCKillerApp.App;
+using Wpcmon.App;
 using System.Windows.Forms.VisualStyles;
 
-namespace WPCKillerApp
+namespace Wpcmon
 {
     public partial class Page2 : Page
     {

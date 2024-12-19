@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     /// <summary>
     /// Interaction logic for RE2.xaml

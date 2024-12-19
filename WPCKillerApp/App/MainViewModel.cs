@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     public class MainViewModel : INotifyPropertyChanged
     {

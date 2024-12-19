@@ -1,0 +1,53 @@
+﻿<Window x:Class="Wpcmon.App.TimesUp_"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Wpcmon.App"
+        mc:Ignorable="d"
+        Title="TimesUp_" Height="auto" Width="auto" WindowState="Maximized" WindowStyle="None" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Background="Black">
+        <StackPanel Width="800" Height="225" Background="#0067b2">
+            <TextBlock Text="Time for a break" Foreground="White" FontSize="33" FontWeight="Light" FontFamily="Segoe UI" Margin="36,20,0,0"/>
+            <TextBlock Text="" Name="Message" Foreground="White" FontSize="18" FontFamily="Segoe UI" Margin="40,16,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Background" Value="#0067b2"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                        <Setter Property="Height" Value="38"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="FontWeight" Value="DemiBold"/>
+                        <Setter Property="BorderBrush" Value="White"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="VerticalAlignment" Value="Bottom"/>
+                        <Setter Property="Margin" Value="0,30,26,0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter HorizontalAlignment="Center" 
+                                                          VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#40FFFFFF"/> 
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Content="Switch users or shut down" Width="235"/>
+                <Button Content="Parent/guardian log in" Width="213"/>
+                <Button Content="Request more time" Width="170"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

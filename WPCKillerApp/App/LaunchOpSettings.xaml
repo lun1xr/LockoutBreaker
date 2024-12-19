@@ -1,7 +1,7 @@
-<Window x:Class="WPCKillerApp.App.LaunchOpSettings"
+<Window x:Class="Wpcmon.App.LaunchOpSettings"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:WPCKillerApp.App"
+    xmlns:local="clr-namespace:Wpcmon.App"
     Title="Settings" Height="auto" Width="auto" PreviewKeyDown="Window_PreviewKeyDown" Name="Window" Icon="Res/wpcmonxlight.ico">
 
     <Grid Margin="20">

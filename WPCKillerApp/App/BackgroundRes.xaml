@@ -2,11 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
-        xmlns:local="clr-namespace:WPCKillerApp.App"
-        x:Class="WPCKillerApp.App.Background">
+        xmlns:local="clr-namespace:Wpcmon.App"
+        x:Class="Wpcmon.App.Background">
 
     <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
-        <MenuItem Header="WPCKillerApp" IsEnabled="False"/>
+        <MenuItem Header="Wpcmon" IsEnabled="False"/>
         <Separator/>
         <MenuItem Header="Settings" Click="MenuItemSettings_Click"/>
         <Separator/>
@@ -15,7 +15,7 @@
 
     <local:MainViewModel x:Key="MainViewModel"/>
 
-    <tb:TaskbarIcon x:Key="TaskbarIcon" ContextMenu="{StaticResource SysTrayMenu}" TrayMouseDoubleClick="TaskbarIcon_DoubleClick" ToolTipText="WPCKillerApp" DataContext="{StaticResource MainViewModel}">
+    <tb:TaskbarIcon x:Key="TaskbarIcon" ContextMenu="{StaticResource SysTrayMenu}" TrayMouseDoubleClick="TaskbarIcon_DoubleClick" ToolTipText="Wpcmon" DataContext="{StaticResource MainViewModel}">
         <tb:TaskbarIcon.Style>
             <Style TargetType="tb:TaskbarIcon">
                 <Setter Property="IconSource" Value="pack://application:,,,/App/Res/wpcmonxlight.ico"/>

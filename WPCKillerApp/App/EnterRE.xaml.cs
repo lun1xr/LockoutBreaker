@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WPCKillerApp.App
+namespace Wpcmon.App
 {
     /// <summary>
     /// Interaction logic for EnterRE.xaml
