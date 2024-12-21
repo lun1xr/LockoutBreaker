@@ -6,7 +6,7 @@
         x:Class="Wpcmon.App.Background">
 
     <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
-        <MenuItem Header="Wpcmon" IsEnabled="False"/>
+        <MenuItem Header="WPC Killer" IsEnabled="False"/>
         <Separator/>
         <MenuItem Header="Settings" Click="MenuItemSettings_Click"/>
         <Separator/>

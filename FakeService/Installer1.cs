@@ -24,7 +24,7 @@ namespace FakeService
             serviceInstaller.ServiceName = "WpcMonSvcx";
             serviceInstaller.DisplayName = "Parental Controls";
             serviceInstaller.Description = "Enforces parental controls for child accounts in Windows. If this service is stopped or disabled, parental controls may not be enforced.";
-            serviceInstaller.StartType = ServiceStartMode.Manual;
+            serviceInstaller.StartType = ServiceStartMode.Boot;
 
             Installers.Add(processInstaller);
             Installers.Add(serviceInstaller);

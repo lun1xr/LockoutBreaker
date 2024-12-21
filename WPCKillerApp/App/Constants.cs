@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace Wpcmon.App
 {
@@ -32,10 +33,32 @@ namespace Wpcmon.App
         }
         private static string GetProcessIdByExePath(string exePath)
         {
-        var process = Process.GetProcesses()
-            .FirstOrDefault(p => p.MainModule.FileName.Equals(exePath, StringComparison.OrdinalIgnoreCase));
+            try
+            {
+                if (!File.Exists(exePath))
+                {
+                    return "File not found";
+                }
+                var process = Process.GetProcesses()
+                    .FirstOrDefault(predicate: p => p.MainModule?.FileName.Equals(exePath, StringComparison.OrdinalIgnoreCase) == true);
 
-        return process != null ? process.Id.ToString() : "Process not found";
+                return process != null ? process.Id.ToString() : "Process not found";
+            }
+            catch (Exception ex)
+            {
+                return $"{ex.Message}";
+            }
+        }
+        public static void Filenotfound()
+        {
+            if (WPCid == "File not found")
+            {
+                MessageBox.Show("Wpcmon.exe not found. It has already been deleted or moved. Functions other than basic WPC killer will still work.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            if (WPCid == "Process not found")
+            {
+                MessageBox.Show("Unable to find process ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         public static string WPCid => GetProcessIdByExePath(@"%systemroot%\System32\wpcmon.exe");
         public static string AppDataFolderName = "Wpcmon";

@@ -100,6 +100,7 @@ namespace Wpcmon.App
             {
                 RecordedKeybindTextBox.Text = recordedKeys;
                 recordedKeys = string.Empty;
+                recordedKeySet.Clear();
             }
         }
 
@@ -113,6 +114,7 @@ namespace Wpcmon.App
             {
                 RecordedKeybindTextBox2.Text = recordedKeys2;
                 recordedKeys2 = string.Empty;
+                recordedKeySet2.Clear();
             }
         }
         private HashSet<Key> recordedKeySet = new HashSet<Key>();
@@ -196,8 +198,8 @@ namespace Wpcmon.App
                 while (!token.IsCancellationRequested)
                 {
                     await Task.Delay(1000);
-                    Process[] processes = Process.GetProcessesByName("wpcmon");
-                    if (processes.Length > 0)
+                    Process processes = Process.GetProcessById(int.Parse(Constants.WPCid));
+                    if (processes != null)
                     {
                         ThatOneThing();
                     }
@@ -284,7 +286,7 @@ namespace Wpcmon.App
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
                 };
 
                 using (Process? process = Process.Start(processInfo))
@@ -298,10 +300,11 @@ namespace Wpcmon.App
                                 // Write your series of commands here
                                 sw.WriteLine("takeown /F %systemroot%\\System32\\wpcmon.exe");
                                 sw.WriteLine("icacls \"%systemroot%\\System32\\wpcmon.exe\" /grant Administrators:F");
-                                sw.WriteLine("taskkill /F /IM wpcmon.exe /T ");
+                                sw.WriteLine("taskkill /F /PID " + Constants.WPCid + " /T");
                                 sw.WriteLine("ren '%systemroot%\\System32\\wpcmon.exe' 'wpcmon_disbaled.exe'");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyMonitor\" /F");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyRefreshTask\" /F");
+                                sw.WriteLine("Pause");
                             }
                         }
 
@@ -310,7 +313,7 @@ namespace Wpcmon.App
 
                         process.WaitForExit();
 
-                        // Handle the output and error as needed
+                        MessageBox.Show(error);
                         Console.WriteLine(output);
                         Console.WriteLine(error);
                     }
@@ -321,6 +324,17 @@ namespace Wpcmon.App
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
         }
+        private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) //Didn't feel like putting this one with the others
+        {
+            if (SafeModeCheckBox.IsChecked == true)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
 
         // Empty references for missing interactions
         private void AutorunCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
@@ -328,9 +342,8 @@ namespace Wpcmon.App
         private void KeybindCheckBox_Click(object sender, RoutedEventArgs e) { }
         private void SafeModeCheckBox_Checked(object sender, RoutedEventArgs e) { }
         private void SafeModeCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
-        private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) { }
 
-        // Save Settings
+
         private async void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
             SaveSettings();

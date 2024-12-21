@@ -14,7 +14,7 @@
                     </Grid>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center"/>
-                        <TextBlock Text="Version 0.0.1" FontSize="12" VerticalAlignment="Bottom"/>
+                        <TextBlock Text="Release 0.1.1" FontSize="12" VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -94,18 +94,6 @@
                     Margin="20,0,20,20"
                     Width="auto">
                     <StackPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ImageCheck}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsChecked, ElementName=ImageCheck}" Value="False">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
                         <TextBlock Text="Subterfuge Mode"
                             FontSize="20"
                             Margin="0,20,0,0"/>
@@ -128,7 +116,7 @@
                                 Text=""
                                 HorizontalAlignment="Left"/>
                         </StackPanel>
-                        <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon, renames the &#10;running process, and creates a fake service identical to the default Windows Parental Controls service"
+                        <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon and creates a fake service identical to the default Windows Parental Controls service"
                             Margin="5,10,0,5"
                             Foreground="Gray"/>
                         <CheckBox Content="Safe Mode"
@@ -138,7 +126,7 @@
                             Checked="SafeModeCheckBox_Checked"
                             Unchecked="SafeModeCheckBox_Unchecked"
                             Click="SafeModeCheckBox_Click"/>
-                        <TextBlock Text="Note: Requires Program Restart"
+                        <TextBlock Text="Note: Requires Program Restart (Service will only install on first use, and is set to run on startup)"
                             Foreground="Red"
                             FontSize="9"
                             Margin="5,0,0,5"/>
