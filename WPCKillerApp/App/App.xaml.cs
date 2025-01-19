@@ -14,7 +14,6 @@ using System.IO;
 using System.Configuration.Install;
 using static System.ServiceProcess.ServiceController;
 using System.Security.Principal;
-using FakeService;
 
 namespace Wpcmon.App
 {
@@ -22,6 +21,7 @@ namespace Wpcmon.App
     {
         public TaskbarIcon _taskbarIcon = null!;
         private LaunchOpSettings _launchOpSettings = null!;
+        private KeybindRegisterExecute _KeybindRegisterExecute = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -37,20 +37,24 @@ namespace Wpcmon.App
             {
                 _launchOpSettings.Show();
             }
-            if (ConfigurationManager.AppSettings["SafeMode"] == "true")
-            {
-                StartLeService();
-            }
-
+            //if (ConfigurationManager.AppSettings["SafeMode"] == "true")
+            //{
+            //  StartLeService();
+            //}
+            _KeybindRegisterExecute = new KeybindRegisterExecute();
+            _KeybindRegisterExecute.Show();
+            _KeybindRegisterExecute.Hide();
         }
 
-        private void OnExit(object sender, ExitEventArgs e)
+        protected override void OnExit(ExitEventArgs e)
         {
+            base.OnExit(e);
             _taskbarIcon.Dispose();
             _launchOpSettings?.Close();
+            _KeybindRegisterExecute.Close();
         }
 
-
+        /*
         private static void StartLeService()
         {
             var processInfo = new ProcessStartInfo
@@ -67,6 +71,7 @@ namespace Wpcmon.App
                 MessageBox.Show($"Service start failed: {ex.Message}");
             }
         }
+        */
         private static void AdminCheck() 
         {
             if (!new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator))

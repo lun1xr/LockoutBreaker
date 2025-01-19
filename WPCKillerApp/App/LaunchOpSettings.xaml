@@ -10,7 +10,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Grid>
                         <Image Source="Res/wpcmonxdark.png" Margin="0,0,10,0" Name="Image"/>
-                        <CheckBox Background="Transparent" BorderBrush="Transparent" Foreground="Transparent" Name="ImageCheck" IsChecked="False" Opacity="0"/>
+                        <CheckBox Background="Transparent" BorderBrush="Transparent" Foreground="Transparent" Name="ImageCheck" IsChecked="False" Opacity="0" Checked="ImageCheck_Check"/>
                     </Grid>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center"/>
@@ -84,64 +84,6 @@
                             HorizontalAlignment="Left"/>
                     </StackPanel>
                 </StackPanel>
-                <Popup IsOpen="{Binding IsChecked, ElementName=ImageCheck}" 
-                       PopupAnimation="Fade"
-                       AllowsTransparency="True">
-                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="5">
-                    <Grid>
-                            <Thumb DragDelta="Popup_DragDelta" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent"/>
-                            <StackPanel
-                    Margin="20,0,20,20"
-                    Width="auto">
-                    <StackPanel>
-                        <TextBlock Text="Subterfuge Mode"
-                            FontSize="20"
-                            Margin="0,20,0,0"/>
-                        <TextBlock Text="Psuedo Device Lock Keybind: Set a keybind that will allow you to summon a fake 'Time is up' Lockscreen"
-                            Margin="5,5,0,0"
-                            Foreground="Gray"/>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Content="Start Recording" 
-                                Width="100" 
-                                Height="20" 
-                                Margin="5,10,0,0" 
-                                HorizontalAlignment="Left"
-                                x:Name="RecordButton"
-                                Click="RecordButton_Click"/>
-                            <TextBox x:Name="RecordedKeybindTextBox"
-                                Width="200"
-                                Height="20"
-                                Margin="5,10,10,0"
-                                IsReadOnly="True"
-                                Text=""
-                                HorizontalAlignment="Left"/>
-                        </StackPanel>
-                        <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon and creates a fake service identical to the default Windows Parental Controls service"
-                            Margin="5,10,0,5"
-                            Foreground="Gray"/>
-                        <CheckBox Content="Safe Mode"
-                            Margin="5,0,0,5"
-                            Name="SafeModeCheckBox"
-                            IsChecked="False"
-                            Checked="SafeModeCheckBox_Checked"
-                            Unchecked="SafeModeCheckBox_Unchecked"
-                            Click="SafeModeCheckBox_Click"/>
-                        <TextBlock Text="Note: Requires Program Restart (Service will only install on first use, and is set to run on startup)"
-                            Foreground="Red"
-                            FontSize="9"
-                            Margin="5,0,0,5"/>
-                        <Button Content="Close"
-                            Width="100"
-                            Height="30"
-                            Margin="5,10,0,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Click="ClosePopup_Click"/>
-                    </StackPanel>
-                </StackPanel>
-                        </Grid>
-                    </Border>
-                </Popup>
             </StackPanel>
         </StackPanel>
         <Button Content="Save Settings" 

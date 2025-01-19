@@ -57,16 +57,10 @@
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\FakeService\FakeService.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.Configuration.Install">
       <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Configuration.Install.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Target Name="CopyFakeService" AfterTargets="Build">
-    <Copy SourceFiles="..\FakeService\bin\$(Configuration)\FakeService.exe" DestinationFolder="$(OutputPath)" />
-  </Target>
 </Project>

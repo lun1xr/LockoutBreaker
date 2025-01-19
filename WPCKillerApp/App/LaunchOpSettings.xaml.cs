@@ -18,7 +18,7 @@ namespace Wpcmon.App
 {
     public partial class LaunchOpSettings : Window
     {
-        private TimesUp_ _timesUp = null!;
+        //private TimesUp_ _timesUp = null!;
         private CancellationTokenSource? _cancellationTokenSource;
         public LaunchOpSettings()
         {
@@ -26,6 +26,7 @@ namespace Wpcmon.App
             this.Width = 371;
             this.Height = 415;
             LoadSettings();
+            this.Closed += SaveSettings;
         }
         // Autorun/Keybind Exclusivity Logic
         private void AutorunCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -41,6 +42,15 @@ namespace Wpcmon.App
         }
 
         // Operation Ties
+        private void ImageCheck_Check(object sender, RoutedEventArgs e)
+        {
+            if (ImageCheck.IsChecked == true)
+            {
+                Extras extras = new();
+                extras.Owner = this;
+                extras.ShowDialog();
+            }
+        }
 
         private void AutoLaunchCheckBox_Click(object sender, RoutedEventArgs e)
         {
@@ -90,20 +100,6 @@ namespace Wpcmon.App
             }
         }
 
-        private bool isRecording = false;
-        private string recordedKeys = string.Empty;
-        private void RecordButton_Click(object sender, RoutedEventArgs e)
-        {
-            isRecording = !isRecording;
-            RecordButton.Content = isRecording ? "Stop Recording" : "Start Recording";
-            if (!isRecording)
-            {
-                RecordedKeybindTextBox.Text = recordedKeys;
-                recordedKeys = string.Empty;
-                recordedKeySet.Clear();
-            }
-        }
-
         private bool isRecording2 = false;
         private string recordedKeys2 = string.Empty;
         private void RecordButton2_Click(object sender, RoutedEventArgs e)
@@ -117,66 +113,38 @@ namespace Wpcmon.App
                 recordedKeySet2.Clear();
             }
         }
-        private HashSet<Key> recordedKeySet = new HashSet<Key>();
+
         private HashSet<Key> recordedKeySet2 = new HashSet<Key>();
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.IsRepeat)
-            {
-                return;
-            }
-
-            if (isRecording)
-            {
-                if (!recordedKeySet.Contains(e.Key))
-                {
-                    if (!string.IsNullOrEmpty(recordedKeys))
-                    {
-                        recordedKeys += " + ";
-                    }
-                    recordedKeys += e.Key.ToString();
-                    RecordedKeybindTextBox.Text = recordedKeys; // Update the TextBox live
-                    recordedKeySet.Add(e.Key);
-                }
-                e.Handled = true;
-            }
 
             if (isRecording2)
             {
                 if (!recordedKeySet2.Contains(e.Key))
                 {
-                    if (!string.IsNullOrEmpty(recordedKeys2))
+                    if (IsModifierKey(e.Key) || !recordedKeySet2.Any(k => !IsModifierKey(k)))
                     {
-                        recordedKeys2 += " + ";
+                        if (!string.IsNullOrEmpty(recordedKeys2))
+                        {
+                            recordedKeys2 += " + ";
+                        }
+                        recordedKeys2 += e.Key.ToString();
+                        RecordedKeybindTextBox2.Text = recordedKeys2;
+                        recordedKeySet2.Add(e.Key);
                     }
-                    recordedKeys2 += e.Key.ToString();
-                    RecordedKeybindTextBox2.Text = recordedKeys2; // Update the TextBox live
-                    recordedKeySet2.Add(e.Key);
                 }
                 e.Handled = true;
             }
         }
-        private void Popup_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        private bool IsModifierKey(Key key)
         {
-            if (sender is Thumb thumb)
-            {
-                var parent = thumb.Parent;
-                while (parent is FrameworkElement frameworkElement && frameworkElement is not Popup)
-                {
-                    parent = frameworkElement.Parent;
-                }
-
-                if (parent is Popup popup)
-                {
-                    var horizontalOffset = popup.HorizontalOffset + e.HorizontalChange;
-                    var verticalOffset = popup.VerticalOffset + e.VerticalChange;
-
-                    popup.HorizontalOffset = horizontalOffset;
-                    popup.VerticalOffset = verticalOffset;
-                }
-            }
+            return key == Key.LeftShift || key == Key.RightShift ||
+                   key == Key.LeftCtrl || key == Key.RightCtrl ||
+                   key == Key.LeftAlt || key == Key.RightAlt ||
+                   key == Key.LWin || key == Key.RWin;
         }
+
         private void AutorunCheckBox_Click(object sender, RoutedEventArgs e) 
         {
             if (AutorunCheckBox.IsChecked == true)
@@ -188,7 +156,7 @@ namespace Wpcmon.App
                 KillYOURSELF();
             }
         }
-        private void ProcessMonitor() 
+        private void ProcessMonitor()
         {
             _cancellationTokenSource = new CancellationTokenSource();
             var token = _cancellationTokenSource.Token;
@@ -198,8 +166,8 @@ namespace Wpcmon.App
                 while (!token.IsCancellationRequested)
                 {
                     await Task.Delay(1000);
-                    Process processes = Process.GetProcessById(int.Parse(Constants.WPCid));
-                    if (processes != null)
+                    Process[] processes = Process.GetProcessesByName("Wpcmon");
+                    if (processes.Length > 0)
                     {
                         ThatOneThing();
                     }
@@ -210,78 +178,15 @@ namespace Wpcmon.App
         {
             _cancellationTokenSource?.Cancel();
         }
-        private void ClosePopup_Click(object sender, RoutedEventArgs e)
-        { 
-            ImageCheck.IsChecked = false;
-        }
-        private void RegisterKeybind()
-        {
-            string? keysString = ConfigurationManager.AppSettings["RecordedKeybind"];
-            string separator = " + ";
-            if (!string.IsNullOrEmpty(keysString))
-            {
-                string[] keyArray = keysString.Split(new string[] { separator }, StringSplitOptions.None);
-                List<Key> keys = new List<Key>();
 
-                foreach (string keyString in keyArray)
-                {
-                    if (Enum.TryParse(keyString, out Key key))
-                    {
-                        keys.Add(key);
-                    }
-                }
-
-                EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyDownEvent, new KeyEventHandler((sender, e) =>
-                {
-                    if (keys.All(key => Keyboard.IsKeyDown(key)))
-                    {
-                        if (_timesUp == null || !_timesUp.IsVisible)
-                        {
-                            _timesUp = new TimesUp_();
-                            _timesUp.Show();
-                        }
-                        else
-                        {
-                            _timesUp.Hide();
-                        }
-                    }
-                }), true);
-            }
-        }
-        private void RegisterKeybind2()
-        {
-            string? keysString = ConfigurationManager.AppSettings["RecordedKeybind2"];
-            string separator = " + ";
-            if (!string.IsNullOrEmpty(keysString))
-            {
-                string[] keyArray = keysString.Split(new string[] { separator }, StringSplitOptions.None);
-                List<Key> keys = new List<Key>();
-
-                foreach (string keyString in keyArray)
-                {
-                    if (Enum.TryParse(keyString, out Key key))
-                    {
-                        keys.Add(key);
-                    }
-                }
-
-                EventManager.RegisterClassHandler(typeof(Window), Keyboard.KeyDownEvent, new KeyEventHandler((sender, e) =>
-                {
-                    if (keys.All(key => Keyboard.IsKeyDown(key)))
-                    {
-                        ThatOneThing();
-                    }
-                }), true);
-            }
-        }
-        private void ThatOneThing()
+        public static void ThatOneThing()
         {
             try
             {
                 ProcessStartInfo processInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Verb = "runas", // This requests elevated privileges
+                    Verb = "runas", 
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
@@ -300,11 +205,10 @@ namespace Wpcmon.App
                                 // Write your series of commands here
                                 sw.WriteLine("takeown /F %systemroot%\\System32\\wpcmon.exe");
                                 sw.WriteLine("icacls \"%systemroot%\\System32\\wpcmon.exe\" /grant Administrators:F");
-                                sw.WriteLine("taskkill /F /PID " + Constants.WPCid + " /T");
-                                sw.WriteLine("ren '%systemroot%\\System32\\wpcmon.exe' 'wpcmon_disbaled.exe'");
+                                sw.WriteLine("taskkill /F /IM wpcmon.exe /T");
+                                sw.WriteLine("ren %systemroot%\\System32\\wpcmon.exe wpcmon_disbaled.exe");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyMonitor\" /F");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyRefreshTask\" /F");
-                                sw.WriteLine("Pause");
                             }
                         }
 
@@ -324,54 +228,42 @@ namespace Wpcmon.App
                 MessageBox.Show($"An error occurred: {ex.Message}");
             }
         }
-        private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) //Didn't feel like putting this one with the others
-        {
-            if (SafeModeCheckBox.IsChecked == true)
-            {
-
-            }
-            else
-            {
-
-            }
-        }
 
         // Empty references for missing interactions
         private void AutorunCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
         private void KeybindCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
         private void KeybindCheckBox_Click(object sender, RoutedEventArgs e) { }
-        private void SafeModeCheckBox_Checked(object sender, RoutedEventArgs e) { }
-        private void SafeModeCheckBox_Unchecked(object sender, RoutedEventArgs e) { }
+
 
 
         private async void SaveSettings_Click(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
+            SaveSettings(sender, e);
             SaveButton.IsEnabled = false;
             await Task.Delay(500);
             SaveButton.IsEnabled = true;
         }
 
-        private void SaveSettings()
+        private void SaveSettings(object? sender, EventArgs e)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.AppSettings.Settings["AutoLaunch"].Value = AutoLaunchCheckBox.IsChecked == true ? "true" : "false";
-            config.AppSettings.Settings["SafeMode"].Value = SafeModeCheckBox.IsChecked == true ? "true" : "false";
             config.AppSettings.Settings["LaunchMinimized"].Value = BackgroundRunCheckBox.IsChecked == true ? "true" : "false";
             config.AppSettings.Settings["Autorun"].Value = AutorunCheckBox.IsChecked == true ? "true" : "false";
             config.AppSettings.Settings["Keybind"].Value = KeybindCheckBox.IsChecked == true ? "true" : "false";
-            config.AppSettings.Settings["RecordedKeybind"].Value = RecordedKeybindTextBox.Text;
             config.AppSettings.Settings["RecordedKeybind2"].Value = RecordedKeybindTextBox2.Text;
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("appSettings");
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind"]))
+            if (ConfigurationManager.AppSettings["Autorun"] == "false")
             {
-                RegisterKeybind();
+                KillYOURSELF();
             }
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind2"]))
-            {
-                RegisterKeybind2();
-            }
+            System.Windows.Application.Current.Windows
+                .OfType<KeybindRegisterExecute>()
+                .FirstOrDefault()?.Close();
+            var KeybindRegisterExecute = new KeybindRegisterExecute();
+            KeybindRegisterExecute.Show();
+            KeybindRegisterExecute.Hide();
         }
         private void LoadSettings()
         {
@@ -384,23 +276,18 @@ namespace Wpcmon.App
             var recordedKeybind2 = ConfigurationManager.AppSettings["RecordedKeybind2"];
 
             AutoLaunchCheckBox.IsChecked = autoLaunch?.ToLower() == "true";
-            SafeModeCheckBox.IsChecked = safeMode?.ToLower() == "true";
             BackgroundRunCheckBox.IsChecked = launchMinimized?.ToLower() == "true";
             AutorunCheckBox.IsChecked = autorun?.ToLower() == "true";
             KeybindCheckBox.IsChecked = keybind?.ToLower() == "true";
-            RecordedKeybindTextBox.Text = recordedKeybind;
             RecordedKeybindTextBox2.Text = recordedKeybind2;
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind"]))
-            {
-                RegisterKeybind();
-            }
-            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["RecordedKeybind2"]))
-            {
-                RegisterKeybind2();
-            }
+
             if (ConfigurationManager.AppSettings["Autorun"] == "true")
             {
                 ProcessMonitor();
+            }
+            if (ConfigurationManager.AppSettings["Autorun"] == "false")
+            {
+                KillYOURSELF();
             }
         }
     }

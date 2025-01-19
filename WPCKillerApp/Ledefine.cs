@@ -19,5 +19,5 @@ using System.Runtime.InteropServices;
 
 // Title alternates
 
-[assembly: AssemblyTitle("WPC Killer")]
-//[assembly: AssemblyTitle("FamilySafetyMonitor")]
+//[assembly: AssemblyTitle("WPC Killer")]
+[assembly: AssemblyTitle("FamilySafetyMonitor")]
