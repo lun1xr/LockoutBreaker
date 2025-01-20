@@ -13,6 +13,9 @@ using System.Security.AccessControl;
 using Constants = Wpcmon.App.Constants;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace Wpcmon.App
 {
@@ -27,6 +30,21 @@ namespace Wpcmon.App
             this.Height = 415;
             LoadSettings();
             this.Closed += SaveSettings;
+            AnimateGradient();
+        }
+        private void AnimateGradient()
+        {
+            Storyboard LogoAnimation1 = new Storyboard();
+
+            DoubleAnimation offsetAnimation = new DoubleAnimation()
+            {
+                From = 1,
+                To = 0,
+                Duration = new Duration(TimeSpan.FromSeconds(2)),
+            };
+            Storyboard.SetTargetName(offsetAnimation, "gradientStop1");
+            Storyboard.SetTargetName(offsetAnimation, "gradientStop2");
+            Storyboard.SetTargetProperty(offsetAnimation, new PropertyPath(GradientStop.OffsetProperty));
         }
         // Autorun/Keybind Exclusivity Logic
         private void AutorunCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -105,7 +123,19 @@ namespace Wpcmon.App
         private void RecordButton2_Click(object sender, RoutedEventArgs e)
         {
             isRecording2 = !isRecording2;
-            RecordButton2.Content = isRecording2 ? "Stop Recording" : "Start Recording";
+            var fillColor = isRecording2 ? Brushes.Red : Brushes.DarkGray;
+
+            foreach (var child in RecordButton2.Children)
+            {
+                if (child is System.Windows.Shapes.Path path)
+                {
+                    path.Fill = fillColor;
+                }
+                else if (child is Ellipse ellipse)
+                {
+                    ellipse.Fill = fillColor;
+                }
+            }
             if (!isRecording2)
             {
                 RecordedKeybindTextBox2.Text = recordedKeys2;

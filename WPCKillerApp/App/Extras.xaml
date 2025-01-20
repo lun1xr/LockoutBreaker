@@ -5,33 +5,100 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpcmon.App"
         mc:Ignorable="d"
-        Title="Extras" Height="270" Width="650" PreviewKeyDown="Window_PreviewKeyDown" Loaded="Window_Loaded">
+        Title="Extras" Height="290" Width="650" PreviewKeyDown="Window_PreviewKeyDown" Background="#252525">
+    <Window.Resources>
+        <Style x:Key="CustomCheckBox" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="Border" Width="17" Height="17" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2" Background="Transparent">
+                                    <Grid>
+                                        <Path x:Name="CheckMark" Data="M 9.9647,14.9617 L 17.4693,7.44735 L 18.5307,8.50732 L 9.96538,17.0837 L 5.46967,12.588 L 6.53033,11.5273 L 9.9647,14.9617 Z" Height="15" Width="13" Stretch="Uniform" Stroke="#FFFFFF" StrokeThickness="1.5" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" StrokeLineJoin="Round" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    </Grid>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Border" Property="Background" Value="DarkGray"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="Border" Property="Background" Value="DarkGray"/>
+                            </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="Gray"/>
+                                <Setter TargetName="CheckMark" Property="Stroke" Value="Gray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <StackPanel
             Margin="20,0,20,10"
             Width="auto" Grid.ColumnSpan="2">
             <StackPanel>
-                <TextBlock Text="Fun Mode"
-                    FontSize="20"
-                    Margin="0,20,0,0"/>
+                <Border DockPanel.Dock="Top" Height="64" Padding="10" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
+                    <StackPanel Orientation="Horizontal">
+                        <Grid>
+                            <Image Source="Res/wpcmonxlight.png" Margin="0,0,10,0" Name="Image"/>
+                        </Grid>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="WPC Killer" FontSize="18" VerticalAlignment="Center" Foreground="white"/>
+                            <TextBlock Text="Fun Mode" FontSize="12" VerticalAlignment="Bottom" Foreground="white"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
                 <TextBlock Text="Psuedo Device Lock Keybind: Set a keybind that will allow you to summon a fake 'Time is up' Lockscreen"
                     Margin="5,5,0,0"
                     Foreground="Gray"/>
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Start Recording" 
-                        Width="100" 
-                        Height="20" 
-                        Margin="5,10,0,0" 
-                        HorizontalAlignment="Left"
-                        x:Name="RecordButton"
-                        Click="RecordButton_Click"/>
                     <TextBox x:Name="RecordedKeybindTextBox"
-                        Width="200"
-                        Height="20"
-                        Margin="5,10,10,0"
-                        IsReadOnly="True"
-                        Text=""
-                        HorizontalAlignment="Left"/>
+                    Width="200"
+                    Height="20"
+                    Margin="5,10,10,0"
+                    IsReadOnly="True"
+                    Text="Modifier + Modifier + Key"
+                    Foreground="DarkGray"
+                    Background="Transparent"
+                    HorizontalAlignment="Left"
+                    BorderThickness="0,0,0,1.5">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="1"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                    <Canvas 
+                        Height="20" Width="20" 
+                        Margin="0,10,0,0"                         
+                        x:Name="RecordButton"
+                        PreviewMouseLeftButtonDown="RecordButton_Click">
+                        <Path 
+                            Data="M110.75,19c50.59,0,91.75,41.16,91.75,91.75s-41.16,91.75-91.75,91.75S19,161.34,19,110.75,60.16,19,110.75,19M110.75,0C49.58,0,0,49.58,0,110.75s49.58,110.75,110.75,110.75,110.75-49.58,110.75-110.75S171.92,0,110.75,0h0Z" 
+                            Fill="DarkGray" 
+                            Height="20" 
+                            Width="20" 
+                            Margin="0,0,0,0" 
+                            Stretch="UniformToFill"/>
+                        <Ellipse 
+                            Fill="DarkGray" 
+                            Width="10" 
+                            Height="10" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Margin="5"/>
+                    </Canvas>
                 </StackPanel>
                 <TextBlock Text="Safe Mode: Changes the taskbar icon of this program to the Windows Parental Controls icon"
                     Margin="5,10,0,5"
@@ -39,6 +106,8 @@
                 <CheckBox Content="Safe Mode"
                     Margin="5,0,0,5"
                     Name="SafeModeCheckBox"
+                    Style="{StaticResource CustomCheckBox}"
+                    Foreground="DarkGray"
                     IsChecked="False"
                     Checked="SafeModeCheckBox_Checked"
                     Unchecked="SafeModeCheckBox_Unchecked"
@@ -47,13 +116,23 @@
                     Foreground="Red"
                     FontSize="9"
                     Margin="5,0,0,5"/>
-                <Button Content="Apply"
+                <Button
+                    x:Name="ApplyButton"
+                    Content="Apply"
                     Width="100"
                     Height="30"
                     Margin="5,10,0,0"
+                    Foreground="white"
+                    Background="#252525"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
-                    Click="ClosePopup_Click"/>
+                    Click="ClosePopup_Click">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </StackPanel>
         </StackPanel>
     </Grid>

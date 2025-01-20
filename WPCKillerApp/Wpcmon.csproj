@@ -16,8 +16,10 @@
     <None Remove="App\Res\winretroubleshoot.png" />
     <None Remove="App\Res\winretroubleshootw.png" />
     <None Remove="App\Res\wpcmon.ico" />
+    <None Remove="App\Res\wpcmon.png" />
     <None Remove="App\Res\wpcmonxdark.png" />
     <None Remove="App\Res\wpcmonxlight.ico" />
+    <None Remove="App\Res\wpcmonxlight.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Remove="App\App.xaml" />
@@ -43,10 +45,16 @@
     <Resource Include="App\Res\wpcmon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="App\Res\wpcmon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="App\Res\wpcmonxdark.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="App\Res\wpcmonxlight.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="App\Res\wpcmonxlight.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

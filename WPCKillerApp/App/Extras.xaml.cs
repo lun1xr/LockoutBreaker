@@ -28,11 +28,6 @@ namespace Wpcmon.App
         public Extras()
         {
             InitializeComponent();
-        }
-
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Task.Delay(10);
             LoadSettings();
         }
 
@@ -45,7 +40,19 @@ namespace Wpcmon.App
         private void RecordButton_Click(object sender, RoutedEventArgs e)
         {
             isRecording = !isRecording;
-            RecordButton.Content = isRecording ? "Stop Recording" : "Start Recording";
+            var fillColor = isRecording ? Brushes.Red : Brushes.DarkGray;
+
+            foreach (var child in RecordButton.Children)
+            {
+                if (child is Path path)
+                {
+                    path.Fill = fillColor;
+                }
+                else if (child is Ellipse ellipse)
+                {
+                    ellipse.Fill = fillColor;
+                }
+            }
             if (!isRecording)
             {
                 RecordedKeybindTextBox.Text = recordedKeys;
@@ -98,10 +105,13 @@ namespace Wpcmon.App
                 _ => ModifierKeys.None,
             };
         }
-        private void ClosePopup_Click(object sender, RoutedEventArgs e)
+        private async void ClosePopup_Click(object sender, RoutedEventArgs e)
         {
 
             SaveSettings(sender, e);
+            ApplyButton.IsEnabled = false;
+            await Task.Delay(500);
+            ApplyButton.IsEnabled = true;
         }
 
         private void SafeModeCheckBox_Click(object sender, RoutedEventArgs e) 
