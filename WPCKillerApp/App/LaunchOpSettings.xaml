@@ -85,7 +85,7 @@
                     <CheckBox Content="Autorun"
                         Margin="10,5,0,5"
                         x:Name="AutorunCheckBox"
-                        IsChecked="True"
+                        IsChecked="False"
                         Checked='AutorunCheckBox_Checked'
                         Unchecked="AutorunCheckBox_Unchecked" 
                         Click="AutorunCheckBox_Click"
@@ -95,7 +95,7 @@
                     <CheckBox Content="Keybind"
                         Margin="10,5,0,5"
                         x:Name="KeybindCheckBox"
-                        IsChecked="False"
+                        IsChecked="True"
                         Checked="KeybindCheckBox_Checked"
                         Unchecked='KeybindCheckBox_Unchecked'
                         Click="KeybindCheckBox_Click"
@@ -163,6 +163,14 @@
             HorizontalAlignment="Right"
             x:Name="SaveButton"
             Click="SaveSettings_Click"
-            Opacity="0"/>
+            Opacity="1"
+            Background="Transparent"
+            Foreground="White">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

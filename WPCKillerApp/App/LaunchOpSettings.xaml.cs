@@ -233,10 +233,10 @@ namespace Wpcmon.App
                             if (sw.BaseStream.CanWrite)
                             {
                                 // Write your series of commands here
-                                sw.WriteLine("takeown /F %systemroot%\\System32\\wpcmon.exe");
-                                sw.WriteLine("icacls \"%systemroot%\\System32\\wpcmon.exe\" /grant Administrators:F");
-                                sw.WriteLine("taskkill /F /IM wpcmon.exe /T");
-                                sw.WriteLine("ren %systemroot%\\System32\\wpcmon.exe wpcmon_disbaled.exe");
+                                sw.WriteLine("takeown /F %systemroot%\\System32\\WpcMon.exe");
+                                sw.WriteLine("icacls \"%systemroot%\\System32\\WpcMon.exe\" /grant Administrators:F");
+                                sw.WriteLine("taskkill /F /IM WpcMon.exe /T");
+                                sw.WriteLine("ren %systemroot%\\System32\\WpcMon.exe wpcmon_disbaled.exe");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyMonitor\" /F");
                                 sw.WriteLine("SCHTASKS /Delete /TN \"\\Microsoft\\Windows\\Shell\\FamilySafetyRefreshTask\" /F");
                             }
