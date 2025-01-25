@@ -24,6 +24,11 @@ namespace Wpcmon.App
             InitializeComponent();
             pages = new Page[] { new DetectedBasic(), new Step1(), new Page2(this), new Page1(), new EnterRE(), new RE2() };
             MainFrame.Content = pages[currentPageIndex];
+            this.Closed += Shutdown();
+        }
+        private EventHandler Shutdown()
+        {
+            return (s, e) => Environment.Exit(0);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -32,6 +37,14 @@ namespace Wpcmon.App
             {
                 currentPageIndex--;
                 MainFrame.Content = pages[currentPageIndex];
+            }
+            if (currentPageIndex == 1) 
+            {
+                Next.IsEnabled = true;
+            }
+            if (currentPageIndex == 4)
+            {
+                Next.IsEnabled = true;
             }
         }
 
