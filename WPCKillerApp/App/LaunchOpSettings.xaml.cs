@@ -183,7 +183,7 @@ namespace Wpcmon.App
             }
             else
             {
-                KillYOURSELF();
+                Kill();
             }
         }
         private void ProcessMonitor()
@@ -204,7 +204,7 @@ namespace Wpcmon.App
                 }
             }, token);
         }
-        private void KillYOURSELF() //Do it
+        private void Kill() 
         {
             _cancellationTokenSource?.Cancel();
         }
